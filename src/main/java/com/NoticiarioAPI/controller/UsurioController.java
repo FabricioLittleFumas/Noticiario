@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.NoticiarioAPI.dao.UsuarioDAO;
 import com.NoticiarioAPI.model.Usuario;
 import com.NoticiarioAPI.service.UsuarioService;
 
@@ -22,30 +23,30 @@ public class UsurioController {
 	
 	@Autowired
 	private UsuarioService service;
-	
+	//ok
 	@GetMapping(value = "/")
-	public ResponseEntity<List<Usuario>> listarTodos(){
-		List<Usuario> usuarios =  service.listAll();
-		return new ResponseEntity<List<Usuario>>(usuarios, HttpStatus.OK);
+	public ResponseEntity<List<UsuarioDAO>> listarTodos(){
+		List<UsuarioDAO> usuarios =  service.listAll();
+		return new ResponseEntity<List<UsuarioDAO>>(usuarios, HttpStatus.OK);
 	}
-	
+	//ok valida id que nao existe na base
 	@GetMapping("/{id}")
-	public ResponseEntity<Usuario> buscarPorId(@PathVariable(name = "id") Long id){
-		Usuario usuario =  service.findById(id);
-		return new ResponseEntity<Usuario>(usuario, HttpStatus.OK);
+	public ResponseEntity<UsuarioDAO> buscarPorId(@PathVariable(name = "id") Long id){
+		UsuarioDAO usuario =  service.findById(id);
+		return new ResponseEntity<UsuarioDAO>(usuario, HttpStatus.OK);
 		
 	}
-	
+	//ok falta verificar campos
 	@PostMapping("/")
-	public ResponseEntity<?> inserir(@RequestBody Usuario usuario){
-		Usuario usuario2 = service.inserir(usuario);
-		return new ResponseEntity<Usuario>(usuario2, HttpStatus.OK);
+	public ResponseEntity<UsuarioDAO> inserir(@RequestBody Usuario usuario){
+		UsuarioDAO usuario2 = service.inserir(usuario);
+		return new ResponseEntity<UsuarioDAO>(usuario2, HttpStatus.OK);
 	}
-	
+	//ok
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> delete(@PathVariable(name = "id") Long id){
+	public ResponseEntity<UsuarioDAO> delete(@PathVariable(name = "id") Long id){
 		service.delete(id);
-		return new ResponseEntity<Usuario>(HttpStatus.ACCEPTED);
+		return new ResponseEntity<UsuarioDAO>(HttpStatus.NO_CONTENT);
 	}
 
 }
