@@ -27,7 +27,7 @@ public class FilterSecurity {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		
 		http.authorizeHttpRequests()
-		.requestMatchers("/usuario","/register","/saveUser").permitAll()
+		.requestMatchers("/apiNoticiario/usuario/**","/usuario/**","/saveUser").permitAll()
 		.requestMatchers("/welcome").authenticated()
 		.requestMatchers("/admin").hasAuthority("Admin")
 		.requestMatchers("/mgr").hasAuthority("Manager")
@@ -64,3 +64,5 @@ public class FilterSecurity {
 	}
 
 }
+
+
