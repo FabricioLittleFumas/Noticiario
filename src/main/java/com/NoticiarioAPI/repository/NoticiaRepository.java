@@ -8,4 +8,6 @@ import com.NoticiarioAPI.model.Noticia;
 @Repository
 public interface NoticiaRepository extends CrudRepository<Noticia, Long>{
 
+	
+	
 }

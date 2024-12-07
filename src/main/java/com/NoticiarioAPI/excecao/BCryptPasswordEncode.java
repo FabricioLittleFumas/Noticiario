@@ -1,18 +1,14 @@
-package com.NoticiarioAPI.util;
+package com.NoticiarioAPI.excecao;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import lombok.Data;
-
-@Data
 @Configuration
-public class AppConfig {
-
+public class BCryptPasswordEncode {
+	
 	@Bean
-	BCryptPasswordEncoder encoder() {
+	public BCryptPasswordEncoder bCryptPasswordEncode() {
 		return new BCryptPasswordEncoder();
 	}
-
 }

@@ -3,6 +3,8 @@ package com.NoticiarioAPI.model;
 import java.io.Serializable;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -38,6 +40,9 @@ public class Noticia implements Serializable{
 	private String subtitulo;
 	private String conteudo;
 	private String data;
+	
+	@Enumerated(EnumType.STRING)
+	private Categoria categoria;
 	
 
 }

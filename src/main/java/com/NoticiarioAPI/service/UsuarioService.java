@@ -26,7 +26,10 @@ public class UsuarioService implements UserDetailsService{
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Usuario usuario = usuarioRepository.findUsuarioByEmail(username);
+		Usuario usuario = usuarioRepository.findUsuarioByEmails(username);
+		System.out.println("oks");
+		System.out.println(username);
+		System.out.println(usuario);
 		User user = new User(usuario.getEmail(), usuario.getSenha(), 
 				usuario.getRoles().stream().map(
 						us -> new SimpleGrantedAuthority(us.getNomeRole())).collect(Collectors.toList()));		
@@ -39,13 +42,11 @@ public class UsuarioService implements UserDetailsService{
 		return usuarios;
 	}
 
-
 	public UsuarioDAO findById(Long id) {
 		// TODO Auto-generated method stub
 		Optional<Usuario> usuario = usuarioRepository.findById(id);
 		return new UsuarioDAO(usuario.orElseThrow(() -> new Excecao("usuario nao encontrado")));
 	}
-
 
 	public UsuarioDAO inserir(Usuario usuario) {
 		// TODO Auto-generated method stub
@@ -53,11 +54,16 @@ public class UsuarioService implements UserDetailsService{
 		return usuario2;
 	}
 
-
 	public void delete(Long id) {
 		usuarioRepository.deleteById(id);
 		return;
-		
 	}
+
+	public UsuarioDAO findByEmail(String email) {
+		Optional<Usuario> usuario = Optional.of(usuarioRepository.findUsuarioByEmails(email));
+		return new UsuarioDAO(usuario.orElseThrow(() -> new Excecao("usuario nao encontrado")));
+	}
+	
+	
 
 }
