@@ -33,10 +33,7 @@ public class SecurityFilterJWT extends OncePerRequestFilter {
 
 		// Reading Token from Authorization Header
 		String token= request.getHeader("Authorization");
-		System.out.println("oksa");
-//		System.out.println(token.replace("Bearer ", 0));
 		if(token !=null) {
-			System.out.println(util.getSubject(token));
 			String username= util.getSubject(token);
 			//if username is not null & Context Authentication must be null
 			if(username !=null && SecurityContextHolder.getContext().getAuthentication()==null) {

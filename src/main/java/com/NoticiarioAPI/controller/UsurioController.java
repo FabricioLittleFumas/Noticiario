@@ -1,9 +1,10 @@
 package com.NoticiarioAPI.controller;
 
-import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.NoticiarioAPI.dao.UsuarioDAO;
+import com.NoticiarioAPI.model.Noticia;
 import com.NoticiarioAPI.model.Usuario;
 import com.NoticiarioAPI.service.UsuarioService;
 import com.NoticiarioAPI.util.JWTUtil;
@@ -27,67 +29,79 @@ import com.NoticiarioAPI.util.UserResponse;
 @RequestMapping("/usuario")
 @RestController
 public class UsurioController {
-	
+
 	@Autowired
 	private JWTUtil util;
-	
+
 	@Autowired
 	private AuthenticationManager authenticationManager;
-	
+
 	@Autowired
 	private UsuarioService service;
-	//ok
+
+	// ok
 	@GetMapping(value = "/")
-	public ResponseEntity<List<UsuarioDAO>> listarTodos(){
-		List<UsuarioDAO> usuarios =  service.listAll();
+	public ResponseEntity<List<UsuarioDAO>> listarTodos() {
+		List<UsuarioDAO> usuarios = service.listAll();
 		return new ResponseEntity<List<UsuarioDAO>>(usuarios, HttpStatus.OK);
 	}
-	//ok valida id que nao existe na base
+
+	// ok valida id que nao existe na base
 	@GetMapping("/{id}")
-	public ResponseEntity<UsuarioDAO> buscarPorId(@PathVariable(name = "id") Long id){
-		UsuarioDAO usuario =  service.findById(id);
+	public ResponseEntity<UsuarioDAO> buscarPorId(@PathVariable(name = "id") Long id) {
+		UsuarioDAO usuario = service.findById(id);
 		return new ResponseEntity<UsuarioDAO>(usuario, HttpStatus.OK);
-		
+
 	}
-	//ok valida id que nao existe na base
+
+	// ok valida id que nao existe na base
 	@GetMapping("/name")
-	public ResponseEntity<UsuarioDAO> buscarPorEmail(@RequestParam(name = "email") String email){
-		UsuarioDAO usuario =  service.findByEmail(email);
+	public ResponseEntity<UsuarioDAO> buscarPorEmail(@RequestParam(name = "email") String email) {
+		UsuarioDAO usuario = service.findByEmail(email);
 		return new ResponseEntity<UsuarioDAO>(usuario, HttpStatus.OK);
-		
+
 	}
-	//ok falta verificar campos
+
+	// ok falta verificar campos
 	@PostMapping("/")
-	public ResponseEntity<UsuarioDAO> inserir(@RequestBody Usuario usuario){
+	public ResponseEntity<UsuarioDAO> inserir(@RequestBody Usuario usuario) {
 		UsuarioDAO usuario2 = service.inserir(usuario);
 		return new ResponseEntity<UsuarioDAO>(usuario2, HttpStatus.OK);
 	}
-	//ok
+
+	// ok
 	@DeleteMapping("/{id}")
-	public ResponseEntity<UsuarioDAO> delete(@PathVariable(name = "id") Long id){
+	public ResponseEntity<UsuarioDAO> delete(@PathVariable(name = "id") Long id) {
 		service.delete(id);
 		return new ResponseEntity<UsuarioDAO>(HttpStatus.NO_CONTENT);
 	}
-	
+
 	@PostMapping("/loginUser")
-	public ResponseEntity<UserResponse> login(@RequestBody UserRequest request){
-		System.out.println("a");
-		System.out.println("a");
-		System.out.println(request.getEmail());
-		System.out.println(request.getSenha());
-		System.out.println("a");
-		//Validate username/password with DB(required in case of Stateless Authentication)
-		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-				request.getEmail(), request.getSenha()));
+	public ResponseEntity<UserResponse> login(@RequestBody UserRequest request) {
+
+		// Validate username/password with DB(required in case of Stateless
+		// Authentication)
+		authenticationManager
+				.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getSenha()));
 		String token = util.generateToken(request.getEmail());
-	
-		return ResponseEntity.ok(new UserResponse(token,"Token generated successfully!"));
+
+		return ResponseEntity.ok(new UserResponse(token, "Token generated successfully!"));
 	}
+	
+	 @GetMapping
+	    public ResponseEntity<Page<Usuario>> paginacaoUsarios(
+	            @RequestParam(defaultValue = "0") int pageNo,
+	            @RequestParam(defaultValue = "10") int pageSize,
+	            @RequestParam (defaultValue = "ASC") Direction direction,
+	            @RequestParam (defaultValue = "id") String id) {
+	        
+	        Page<Usuario> products = service.getNoticiaspaginadas(pageNo, pageSize,direction, id);
+	        return ResponseEntity.ok(products);
+	    }
 //	
 //	@PostMapping("/getData")
 //	public ResponseEntity<String> testAfterLogin(Principal p){
 //		return ResponseEntity.ok("You are accessing data after a valid Login. You are :" +p.getName());
 //	}
-
 
 }

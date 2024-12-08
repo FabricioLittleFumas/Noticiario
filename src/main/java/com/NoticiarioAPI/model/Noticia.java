@@ -2,6 +2,7 @@ package com.NoticiarioAPI.model;
 
 import java.io.Serializable;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -43,6 +44,11 @@ public class Noticia implements Serializable{
 	
 	@Enumerated(EnumType.STRING)
 	private Categoria categoria;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "statusnoticia")
+	private StatusNoticia statusNoticia;
+	
 	
 
 }

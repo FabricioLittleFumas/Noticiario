@@ -5,6 +5,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.NoticiarioAPI.dao.NoticiaDAO;
@@ -30,6 +34,31 @@ public class NoticiaService {
 			return new NoticiaDAO(noticia.get());
 		}
 		throw new Excecao("Noticia não encontrada");
+	}
+
+	public void deletePorId(Long id) {
+		// TODO Auto-generated method stub
+		buscarPorId(id);
+		noticiaRepository.deleteById(id);
+		return;
+	}
+
+	public NoticiaDAO inserirNoticia(Noticia noticia) {
+		// TODO Auto-generated method stub
+		Noticia noticiaInsert = noticiaRepository.save(noticia);
+		return new NoticiaDAO(noticiaInsert);
+	}
+
+	public Page<Noticia> getNoticiaspaginadas(int pageNo, int pageSize) {
+		// TODO Auto-generated method stub
+		Pageable pageable = PageRequest.of(pageNo, pageSize);
+        return noticiaRepository.findAll(pageable);
+	}
+
+	public Page<Noticia> getNoticiaspaginadas(int pageNo, int pageSize, Direction direction, String id) {
+		// TODO Auto-generated method stub
+		Pageable pageable = PageRequest.of(pageNo, pageSize,direction, id);
+        return noticiaRepository.findAll(pageable);
 	}
 	
 

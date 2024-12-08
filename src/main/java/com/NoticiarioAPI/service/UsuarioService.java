@@ -6,6 +6,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -62,6 +66,12 @@ public class UsuarioService implements UserDetailsService{
 	public UsuarioDAO findByEmail(String email) {
 		Optional<Usuario> usuario = Optional.of(usuarioRepository.findUsuarioByEmails(email));
 		return new UsuarioDAO(usuario.orElseThrow(() -> new Excecao("usuario nao encontrado")));
+	}
+
+	public Page<Usuario> getNoticiaspaginadas(int pageNo, int pageSize, Direction direction, String id) {
+		// TODO Auto-generated method stub
+		Pageable pageable = PageRequest.of(pageNo, pageSize,direction, id);
+        return usuarioRepository.findAll(pageable);
 	}
 	
 	
